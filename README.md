@@ -1,28 +1,14 @@
 # Flight Service
 
-A RESTful service that aggregates flight information from multiple providers (SkyScanner, Google Flights, and CheapFlights), comparing prices and durations to find the best options.
+A RESTful service that aggregates flight information from multiple providers (SkyScanner, Google Flights, and CheapFlights), comparing prices and durations to find the best options. ⚠️ [Important note about provider implementations](#important-note-about-providers)
 
 ## Features
 
-- Concurrent flight search across multiple providers
-- Request caching using singleflight pattern
-- JWT-based authentication
-- Price and duration comparison
-- Docker support
-
-## Important Note About Providers
-
-This service uses mock implementations for all providers due to API availability constraints. I strongly suggest that you update your challenge request.
-
-- **Google Flights**: The API was officially discontinued by Google on April 10, 2018, with no direct replacement available.
-- **SkyScanner**: Requires a formal business partnership process:
-  - Submit application to Skyscanner's Partnerships team
-  - Go through business review process
-  - Wait for team evaluation
-  - Receive API credentials if approved
-- **CheapFlights**: No information about a public API was found
-
-All provider implementations in this project use mock data to demonstrate the service's architecture and functionality.
+- Concurrent flight search across multiple providers [`service/flight_service.go`](service/flight_service.go)
+- Request caching using singleflight pattern [`service/flight_service.go`](service/flight_service.go)
+- JWT-based authentication [`handler/auth_handler.go`](handler/auth_handler.go)
+- Price and duration comparison [`service/flight_service.go`](service/flight_service.go)
+- Docker support [`Dockerfile`](Dockerfile)
 
 ## Prerequisites
 
@@ -149,21 +135,7 @@ curl "http://localhost:8080/flights/search?origin=NYC&destination=LAX&date=2024-
 curl -X POST http://localhost:8080/auth/login -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin123"}' | jq -r '.token' | xargs -I {} curl "http://localhost:8080/flights/search?origin=NYC&destination=LAX&date=2024-01-01" -H "Authorization: Bearer {}" | jq
 ```
 
-## Testing
-
-Run all tests:
-```bash
-go test ./...
-```
-
-Run specific test:
-```bash
-go test ./service -run TestFlightServiceImpl_GetFlights_Concurrent
-```
-
-## Development
-
-### Project Structure
+## Project Structure
 
 ```
 flight-service/
@@ -174,6 +146,20 @@ flight-service/
 ├── main.go        # Application entry point
 └── Dockerfile     # Docker configuration
 ```
+
+## Important Note About Providers
+
+This service uses mock implementations for all providers due to API availability constraints. I strongly suggest that you update your challenge request.
+
+- **Google Flights** [`provider/google_flights.go`](provider/google_flights.go): The API was officially discontinued by Google on April 10, 2018, with no direct replacement available.
+- **SkyScanner** [`provider/sky_scanner.go`](provider/sky_scanner.go): Requires a formal business partnership process:
+  - Submit application to Skyscanner's Partnerships team
+  - Go through business review process
+  - Wait for team evaluation
+  - Receive API credentials if approved
+- **CheapFlights** [`provider/cheap_flights.go`](provider/cheap_flights.go): No information about a public API was found
+
+All provider implementations in this project use mock data to demonstrate the service's architecture and functionality.
 
 ### Adding a New Provider
 
