@@ -4,10 +4,10 @@ A RESTful service that aggregates flight information from multiple providers (Sk
 
 ## Features
 
-- Concurrent flight search across multiple providers [`service/flight_service.go`](service/flight.go)
-- Request caching using singleflight pattern [`service/flight_service.go`](service/flight.go)
-- JWT-based authentication [`handler/auth_handler.go`](handler/auth.go)
-- Price and duration comparison [`service/flight_service.go`](service/flight.go)
+- Concurrent flight search across multiple providers [`service/flight.go`](service/flight.go)
+- Request caching using singleflight pattern [`service/flight.go`](service/flight.go)
+- JWT-based authentication [`handler/auth.go`](handler/auth.go)
+- Price and duration comparison [`service/flight.go`](service/flight.go)
 - Docker support [`Dockerfile`](Dockerfile)
 
 ## Prerequisites
