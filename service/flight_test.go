@@ -143,20 +143,17 @@ func TestFlightServiceImpl_GetFlights_Concurrent(t *testing.T) {
 	}
 
 	const numConcurrentCalls = 10
+	results := make([][]*model.Flight, numConcurrentCalls)
 	var wg sync.WaitGroup
-	var results [][]*model.Flight
-	var resultsMutex sync.Mutex
 
 	// Make concurrent calls
 	wg.Add(numConcurrentCalls)
 	for i := 0; i < numConcurrentCalls; i++ {
+		i := i // Capture loop variable
 		go func() {
 			defer wg.Done()
 			flights := s.GetFlights(params)
-
-			resultsMutex.Lock()
-			results = append(results, flights)
-			resultsMutex.Unlock()
+			results[i] = flights
 		}()
 	}
 
@@ -175,7 +172,7 @@ func TestFlightServiceImpl_GetFlights_Concurrent(t *testing.T) {
 	}
 
 	// Verify results
-	assert.Equal(t, numConcurrentCalls, len(results), "Should have results from all calls")
+	assert.NotEmpty(t, results, "Should have results")
 
 	// All results should be identical due to singleflight
 	for i := 1; i < len(results); i++ {

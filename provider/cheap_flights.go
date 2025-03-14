@@ -29,33 +29,7 @@ func NewCheapFlights() *CheapFlights {
 I didn't find any API for cheapflights.com ¯\_(ツ)_/¯
 I suggest you to update your challenge request
 */
-func (c *CheapFlights) GetFlights(origin, destination, date string) ([]*model.Flight, error) {
-	// I'll get back to this if I have time to read the CheapFlights API
-	/*
-	   url := fmt.Sprintf(CheapFlightsAPIURL, origin, destination, date)
-	   resp, err := http.Get(url)
-	   if err != nil {
-	       return nil, fmt.Errorf("CheapFlights error: %w", err)
-	   }
-	   defer resp.Body.Close()
-
-	   var response CheapFlightsResponse
-	   if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-	       return nil, fmt.Errorf("CheapFlights decode error: %w", err)
-	   }
-
-	   flights := make([]*model.Flight, len(response.Data))
-	   for i, v := range response.Data {
-	       flights[i] = &model.Flight{
-	           Provider:      c.Name,
-	           Price:         v.Price,
-	           Duration:      v.Duration,
-	           DepartureTime: v.DepartureTime,
-	       }
-	   }
-	   return flights, nil
-	*/
-
+func (c *CheapFlights) GetFlights(origin, destination string, date time.Time) ([]*model.Flight, error) {
 	// Dummy implementation
 	baseTime := time.Date(2025, time.March, 28, 0, 0, 0, 0, time.UTC)
 	return []*model.Flight{

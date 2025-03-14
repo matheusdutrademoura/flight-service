@@ -23,7 +23,7 @@ type FlightServiceImpl struct {
 	flightGroup singleflight.Group
 }
 
-func NewFlightService(providers ...provider.FlightFetcher) *FlightServiceImpl {
+func NewFlightService(providers ...provider.FlightFetcher) FlightService {
 	return &FlightServiceImpl{
 		providers:   providers,
 		flightGroup: singleflight.Group{},
@@ -43,11 +43,10 @@ func (s *FlightServiceImpl) GetFlights(params *model.SearchParams) []*model.Flig
 func (s *FlightServiceImpl) getFlights(params *model.SearchParams) []*model.Flight {
 	var wg sync.WaitGroup
 	results := make(chan *model.Flight)
-	dateStr := params.Date.Format(DateFormat)
 
 	fetcherFunc := func(p provider.FlightFetcher) {
 		defer wg.Done()
-		flights, err := p.GetFlights(params.Origin, params.Destination, dateStr)
+		flights, err := p.GetFlights(params.Origin, params.Destination, params.Date)
 		if err != nil {
 			return
 		}
